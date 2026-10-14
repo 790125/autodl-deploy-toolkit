@@ -1,0 +1,66 @@
+# LoRA 训练配置模板（kohya sd-scripts / sdxl_train_network.py）
+# 用法：复制为 <name>.toml，改掉路径与参数后通过 --config_file 传入
+# ⚠️ 本模板不含任何具体数据集信息
+
+[model_arguments]
+# 底模路径（放在数据盘）
+pretrained_model_name_or_path = "/root/autodl-tmp/models/<base_model>.safetensors"
+v2 = false
+v_parameterization = false
+
+[additional_network_arguments]
+# 网络维度：LoRA 常用 8~32
+network_module = "networks.lora"
+network_dim = 16
+network_alpha = 8
+network_train_unet_only = false
+
+[optimizer_arguments]
+# 常用优化器：AdamW / AdamW8bit / prodigy / lion
+optimizer_type = "AdamW8bit"
+learning_rate = 1e-4
+text_encoder_lr = 5e-5
+unet_lr = 1e-4
+lr_scheduler = "cosine_with_restarts"
+lr_scheduler_num_cycles = 3
+lr_warmup_steps = 100
+
+[dataset_arguments]
+# 数据集根目录（train_data_dir 下每个子目录为一组，目录名形如 "10_concept"）
+train_data_dir = "/root/autodl-tmp/ds/<dataset>"
+resolution = "1024,1024"
+enable_bucket = true
+min_bucket_reso = 512
+max_bucket_reso = 1536
+bucket_reso_steps = 64
+caption_extension = ".txt"
+shuffle_caption = true
+keep_tokens = 2
+
+[training_arguments]
+output_dir = "/root/autodl-tmp/output/<run_name>"
+output_name = "<run_name>"
+save_model_as = "safetensors"
+save_every_n_epochs = 2
+max_train_epochs = 10
+train_batch_size = 2
+gradient_accumulation_steps = 2
+gradient_checkpointing = true
+mixed_precision = "bf16"
+seed = 42
+max_data_loader_n_workers = 2
+persistent_data_loader_workers = true
+save_precision = "bf16"
+
+# 显存相关：显存不足时打开
+# xformers = true
+# sdpa = true
+# cache_latents = true
+# cache_latents_to_disk = true
+# lowram = true
+
+# 日志（配合 TensorBoard，按需调整间隔）
+logging_dir = "/root/autodl-tmp/output/logs_<run_name>"
+log_with = "tensorboard"
+log_prefix = "<run_name>"
+sample_every_n_epochs = 0

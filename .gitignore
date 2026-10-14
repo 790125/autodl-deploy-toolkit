@@ -1,0 +1,47 @@
+# 凭据与环境
+.env
+*.local.json
+*_ssh.local.json
+credentials.json
+secrets.json
+
+# 日志
+*.log
+*_err.log
+nohup.out
+
+# 进程与运行时文件
+*.pid
+*.nohup
+.aria2
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# 模型与数据（体积大，不入库）
+models/
+data/
+output/
+output_*/
+ds/
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.npz
+*.zip
+
+# 训练产物
+logs/
+runs/
+tb.log
+
+# 编辑器
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
